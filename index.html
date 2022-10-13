@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <title>Load page when available</title>
+    <style>
+      #root {
+        display: flex;
+        flex-direction: column;
+      }
+      .horizontal {
+        display: flex;
+        flex-direction: row;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <article class="horizontal">
+        <div id="waiting"><span aria-busy="true"></span>&nbsp; &nbsp; <span>waiting on:</span></div>
+        <b><span id="url"> </span></b>
+      </article>
+      <article>
+        Help:
+        <a href="https://github.com/metapages/load-page-when-available"
+          >https://github.com/metapages/load-page-when-available</a
+        >
+      </article>
+    </div>
+
+    <script type="module">
+      const url = new URL(window.location.href);
+      const urlParam = url.searchParams.get("url");
+
+      if (urlParam && urlParam.startsWith("http")) {
+        document.getElementById("url").innerHTML = `&nbsp; ${urlParam}`;
+        setInterval(() => {
+          fetch(urlParam, {
+            method: "GET",
+            mode: "no-cors",
+          })
+            .then((response) => {
+                // If the promise doesn't reject then the page is available
+                window.location.href = urlParam;
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }, 1000);
+      } else {
+        document.getElementById("url").innerHTML = `Missing in URL <code>${window.location.origin}${window.location.pathname}?url={YOUR URL}</code>`;
+        document.getElementById("waiting").style.display = "none";
+      }
+    </script>
+  </body>
+</html>
