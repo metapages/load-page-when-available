@@ -46,7 +46,10 @@
         .get("url");
 
       if (urlParam && urlParam.startsWith("http")) {
-        const tokens = urlParam.split("?url=");
+        const tokens = window
+          .location
+          .href
+          .split("?url=");
         tokens.shift();
         const targetUrl = tokens.join("?url=");
         document
