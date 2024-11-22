@@ -58,11 +58,14 @@
         setInterval(() => {
           fetch(targetUrl, {
             method: "GET",
-            mode: "no-cors"
+            mode: "no-cors",
+            redirect: "follow"
           })
             .then((response) => {
-              // If the promise doesn't reject then the page is available
-              window.location.href = targetUrl;
+              if (response.status >= 200 && response.status < 300) { 
+                // If the promise doesn't reject then the page is available
+                window.location.href = targetUrl;
+              }
             })
             .catch((error) => {
               console.log(error);
