@@ -58,7 +58,6 @@
         setInterval(() => {
           fetch(targetUrl, {
             method: "GET",
-            mode: "no-cors",
             redirect: "follow"
           })
             .then((response) => {
